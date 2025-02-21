@@ -1,22 +1,21 @@
 import React, { useState } from "react";
 import LatterCard from "./LatterCard";
 
-const Footer = ({ app }) => {
-  const { AppData } = app;
-  const { totleCharacters } = AppData;
+const Footer = ({ appStates, appStatesUpdater }) => {
+  // const { AppData } = app;
+  // const { totleCharacters } = AppData;
 
-  const AllLetters = {};
+  // const AllLetters = {};
 
-  if (totleCharacters) {
-    totleCharacters.forEach((char) => {
-      const letter = char.toLowerCase();
-      AllLetters[letter] = (AllLetters[letter] || 0) + 1;
-    });
-    console.log(AllLetters);
-  }
+  // if (totleCharacters) {
+  //   totleCharacters.forEach((char) => {
+  //     const letter = char.toLowerCase();
+  //     AllLetters[letter] = (AllLetters[letter] || 0) + 1;
+  //   });
+  // }
   const [SeeMoreState, setSeeMoreState] = useState(false);
   const seeMoreHandler = (event) => {
-    setSeeMoreState((pre) => !pre); 
+    setSeeMoreState((pre) => !pre);
   };
 
   return (
@@ -25,7 +24,7 @@ const Footer = ({ app }) => {
         letter density
       </h2>
       <div className="py-4">
-        {Object.entries(AllLetters).map((letterInfo, index) => {
+        {/* {Object.entries(AllLetters).map((letterInfo, index) => {
           if (index >= 5) return;
           return (
             <LatterCard
@@ -35,7 +34,10 @@ const Footer = ({ app }) => {
             />
           );
         })}
-        <div id="remainElmWraper" className={`${SeeMoreState? "block":"hidden"}`}>
+        <div
+          id="remainElmWraper"
+          className={`${SeeMoreState ? "block" : "hidden"}`}
+        >
           {Object.entries(AllLetters).map((letterInfo, index) => {
             if (index <= 5) return;
             return (
@@ -46,7 +48,7 @@ const Footer = ({ app }) => {
               />
             );
           })}
-        </div>
+        </div> */}
         <button
           onClick={seeMoreHandler}
           className="text-primaryText flex items-center justify-center text-lg md:text-xl rounded space-x-2 mt-2"

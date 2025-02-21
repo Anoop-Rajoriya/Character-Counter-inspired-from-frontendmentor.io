@@ -3,7 +3,6 @@ import React from "react";
 const LatterCard = ({ letterInfo, totleLetters }) => {
   const [letter, count] = letterInfo;
   let percentages = (count / totleLetters) * 100;
-  console.log(count, totleLetters, percentages)
   return (
     <div className="flex items-center justify-center gap-2 text-primaryText py-2">
       <span className="capitalize min-w-5">{letter}</span>

@@ -1,22 +1,27 @@
 import { useState } from "react";
 
-const CustomCheckbox = ({ label }) => {
-  const [checked, setChecked] = useState(false);
-
+const CustomCheckbox = ({ label, spaceExcluding, appStatesUpdater }) => {
   return (
     <label className="flex items-center cursor-pointer relative">
       <input
         type="checkbox"
         className="absolute opacity-0"
-        checked={checked}
-        onChange={() => setChecked(!checked)}
+        checked={spaceExcluding}
+        onChange={() =>
+          appStatesUpdater((pre) => ({
+            ...pre,
+            spaceExcluding: !spaceExcluding,
+          }))
+        }
       />
       <div
         className={`size-6 flex items-center justify-center border-2  text-primaryText rounded-md transition-all ${
-          checked ? "bg-orange border-orange" : "border-complimentaryText"
+          spaceExcluding
+            ? "bg-orange border-orange"
+            : "border-complimentaryText"
         }`}
       >
-        {checked && (
+        {spaceExcluding && (
           <svg
             className="w-4 h-4 text-inherit"
             viewBox="0 0 20 20"

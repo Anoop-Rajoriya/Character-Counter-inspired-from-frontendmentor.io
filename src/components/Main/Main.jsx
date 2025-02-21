@@ -1,26 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomCheckbox from "./CustomCheckBox";
 import Card from "./Card";
 
-const Main = ({ app }) => {
-  const { AppData, setAppData } = app;
-  const { charactersCount, wordsCount, sentancesCount } = AppData;
+const Main = ({ appStates, appStatesUpdater }) => {
+  // const textAreaHandler = (event) => {
+  //   const userInput = event.currentTarget.value;
+  //   // const charList = userInput.replace("\n", "").split("");
+  //   const charList = spaceExcludeState
+  //     ? userInput.replace("\n", "").replace(" ", "").split("")
+  //     : userInput.replace("\n", "").split("");
+  //   console.log(charList);
+  //   const totleChar = userInput.replace("\n", "").length;
+  //   const totleWords = userInput.split(" ").length - 1;
+  //   const totleSentances = userInput.split(/[.!?]/g).length - 1;
 
-  const textAreaHandler = (event) => {
-    const userInput = event.currentTarget.value;
-    const charList = userInput.replace("\n", "").split("");
-    const totleChar = userInput.replace("\n", "").length;
-    const totleWords = userInput.split(" ").length - 1;
-    const totleSentances = userInput.split(/[.!?]/g).length - 1;
+  // setAppData((preState) => ({
+  //   ...preState,
+  //   charactersCount: totleChar,
+  //   wordsCount: totleWords,
+  //   sentancesCount: totleSentances,
+  //   totleCharacters: charList,
+  // }));
+  // };
 
-    setAppData((preState) => ({
-      ...preState,
-      charactersCount: totleChar,
-      wordsCount: totleWords,
-      sentancesCount: totleSentances,
-      totleCharacters: charList,
-    }));
-  };
+  function textAreaHandler(event) {
+    const textAreaValue = event.currentTarget.value.trim();
+    appStatesUpdater((pre) => ({ ...pre, userInput: textAreaValue }));
+  }
 
   return (
     <main className="">
@@ -34,8 +40,17 @@ const Main = ({ app }) => {
       />
       <div className="py-4 flex flex-col gap-4 md:flex-row md:justify-between">
         <div className="flex flex-col gap-3 md:flex-row">
-          <CustomCheckbox label="exclude spaces" />
-          <CustomCheckbox label="set characters limit" />
+          {/* {["exclude spaces", "set characters limit"].map((label, index) => (
+            <CustomCheckbox
+              key={index}
+              label={label}
+            />
+          ))} */}
+          <CustomCheckbox
+            label="exclude spaces"
+            spaceExcluding={appStates.spaceExcluding}
+            appStatesUpdater={appStatesUpdater}
+          />
         </div>
         <p className="text-complimentaryText capitalize">
           apporox reading time <span className="font-bold">1min</span>
@@ -45,13 +60,17 @@ const Main = ({ app }) => {
         {[
           {
             name: "totel characters",
-            number: charactersCount,
+            number: appStates.letterList.length,
             className: "bg-orange",
           },
-          { name: "word count", number: wordsCount, className: "bg-red" },
+          {
+            name: "word count",
+            number: appStates.userInput.split(" ").length - 1 || 0,
+            className: "bg-red",
+          },
           {
             name: "sentacne count",
-            number: sentancesCount,
+            number: appStates.userInput.split(/[.!?]/g).length - 1 || 0,
             className: "bg-violet",
           },
         ].map((card, index) => (

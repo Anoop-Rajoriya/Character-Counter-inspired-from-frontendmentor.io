@@ -1,12 +1,9 @@
 import React from "react";
 
-const Header = ({ app }) => {
-  const { AppData, setAppData } = app;
-  // console.log(app)
-  // const darkTheme = true
-  const { darkTheme } = AppData;
+const Header = ({ appStates, appStatesUpdater }) => {
+  const { darkTheme } = appStates;
   const themeHandler = (event) => {
-    setAppData((preState) => ({ ...preState, darkTheme: !darkTheme }));
+    appStatesUpdater((preState) => ({ ...preState, darkTheme: !darkTheme }));
   };
 
   return (
