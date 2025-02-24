@@ -1,27 +1,31 @@
-import { useState } from "react";
+import React from "react";
 
-const CustomCheckbox = ({ label, spaceExcluding, appStatesUpdater }) => {
+/**
+ * CustomCheckbox Component
+ * A reusable checkbox with a label and dynamic styling.
+ *
+ * Props:
+ * - label: The label text for the checkbox.
+ * - value: Boolean value indicating whether the checkbox is checked.
+ * - handler: Function to update the application state.
+ */
+const CustomCheckbox = ({ label, handler, value }) => {
   return (
     <label className="flex items-center cursor-pointer relative">
       <input
         type="checkbox"
         className="absolute opacity-0"
-        checked={spaceExcluding}
-        onChange={() =>
-          appStatesUpdater((pre) => ({
-            ...pre,
-            spaceExcluding: !spaceExcluding,
-          }))
-        }
+        value={value}
+        onChange={handler}
       />
       <div
-        className={`size-6 flex items-center justify-center border-2  text-primaryText rounded-md transition-all ${
-          spaceExcluding
-            ? "bg-orange border-orange"
+        className={`size-6 flex items-center justify-center border-2 rounded-md transition-all ${
+          value
+            ? "bg-orange border-orange text-primaryText"
             : "border-complimentaryText"
         }`}
       >
-        {spaceExcluding && (
+        {value && (
           <svg
             className="w-4 h-4 text-inherit"
             viewBox="0 0 20 20"
@@ -35,7 +39,7 @@ const CustomCheckbox = ({ label, spaceExcluding, appStatesUpdater }) => {
           </svg>
         )}
       </div>
-      <span className={`pl-2 capitalize text-complimentaryText`}>{label}</span>
+      <span className="pl-2 capitalize text-complimentaryText">{label}</span>
     </label>
   );
 };

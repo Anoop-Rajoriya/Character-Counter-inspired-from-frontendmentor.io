@@ -1,11 +1,11 @@
 import React from "react";
 
-const LatterCard = ({ letterInfo, totleLetters }) => {
-  const [letter, count] = letterInfo;
-  let percentages = (count / totleLetters) * 100;
+const LatterCard = ({ char, count, total }) => {
+  // const [letter, count] = letterInfo;
+  let percentages = (count / total) * 100;
   return (
     <div className="flex items-center justify-center gap-2 text-primaryText py-2">
-      <span className="capitalize min-w-5">{letter}</span>
+      <span className="capitalize min-w-5">{char}</span>
       <div
         className={`flex-1 rounded-full h-4 md:h-5 bg-complimentaryBg relative `}
       >
