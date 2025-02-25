@@ -27,14 +27,50 @@ const Main = () => {
   };
 
   const getReadingTime = (wordsPerMinute = 150) => {
-    // const wordCount = userInputs.textString.trim().split(/\s+/).length;
     const wordCount = getTextStringLettersCounts();
     const minutes = (wordCount / wordsPerMinute).toFixed(2);
     return minutes >= 1 ? `${minutes} Min` : `${Math.ceil(minutes * 60)} Sec`;
   };
 
-  const getTextStringLetterDesity = (count=null) => {
-    
+  const getTextStringLetterDensity = (size = null) => {
+    const userTextString = userInputs.canExcludSpaces
+      ? userInputs.textString.replace(/\s+/g, "").split("")
+      : userInputs.textString.split("");
+
+    // determining the density of each letter
+    let letterDensity = {};
+
+    userTextString.forEach((letter) => {
+      letterDensity[letter] = (letterDensity[letter] || 0) + 1;
+    });
+
+    function sortArrayOfArrays(arr) {
+      return arr.sort((a, b) => {
+        const getPriority = (char) => {
+          if (/[A-Z]/.test(char)) return 1; // Capital letters
+          if (/[a-z]/.test(char)) return 2; // Small letters
+          if (/[0-9]/.test(char)) return 3; // Numbers
+          return 4; // Special characters
+        };
+
+        const charA = a[0];
+        const charB = b[0];
+
+        let priorityA = getPriority(charA);
+        let priorityB = getPriority(charB);
+
+        if (priorityA !== priorityB) {
+          return priorityA - priorityB; // Sort by priority
+        }
+
+        return String(charA).localeCompare(String(charB)); // Sort alphabetically/lexically
+      });
+    }
+
+    if (size) {
+      return sortArrayOfArrays(Object.entries(letterDensity)).slice(0, size);
+    }
+    return sortArrayOfArrays(Object.entries(letterDensity));
   };
 
   return (
@@ -82,16 +118,46 @@ const Main = () => {
         </p>
       </div>
       <div className="flex flex-col md:flex-row gap-3 pt-2 py-4">
-        {getTextStringLetterDesity(5)}
+        {[
+          {
+            label: "Total Characters",
+            value: getTextStringLettersCounts(),
+            color: "bg-orange",
+          },
+          {
+            label: "Word Count",
+            value: getTextStringWordsCounts(),
+            color: "bg-red",
+          },
+          {
+            label: "Sentence Count",
+            value: getTextStringSentancesCounts(),
+            color: "bg-violet",
+          },
+        ].map((obj, index) => (
+          <Card key={index} cardObj={obj} />
+        ))}
       </div>
       <div className="pt-2">
         <h2 className="text-primaryText capitalize font-bold text-xl md:text-2xl">
           Letter Density
         </h2>
         <div className="py-4">
-          {getTextStringLetterDesity(5).map((letter) => (
-            <LetterCard letterObj={letter} />
-          ))}
+          {!userInputs.canSeeMore
+            ? getTextStringLetterDensity(5).map((letterinfo, index) => (
+                <LetterCard
+                  key={index}
+                  letter={letterinfo}
+                  totle={getTextStringLettersCounts()}
+                />
+              ))
+            : getTextStringLetterDensity().map((letterinfo, index) => (
+                <LetterCard
+                  key={index}
+                  letter={letterinfo}
+                  totle={getTextStringLettersCounts()}
+                />
+              ))}
           <button
             onClick={() =>
               setUserInputs((preState) => ({
