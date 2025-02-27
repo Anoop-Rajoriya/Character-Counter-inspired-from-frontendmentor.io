@@ -1,18 +1,82 @@
-# 📝Brief
+# Letter Counter WebApp
 
-Your challenge is to build out this character counter and get it looking as close to the design as possible.
+A real-time text analysis tool **inspired from frontendmentor.io** built with **React** and **Tailwind CSS** to help you count characters, words, sentences, and analyze letter density. Easily toggle features like space exclusion, letter limits, and reading time estimation — with full support for light and dark modes.
 
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
+## 🚀 Live Demo
 
-Your users should be able to:
+[View Live App](https://anoop-rajoriya.github.io/LetterCounter-WebApp/)
 
-    - Analyze the character, word, and sentence counts for their text
-    - Exclude/Include spaces in their character count
-    - Set a character limit
-    - Receive a warning message if their text exceeds their character limit
-    - See the approximate reading time of their text
-    - Analyze the letter density of their text
-    - Select their color theme
-    - Navigate the app and perform all actions using only their keyboard
-    - View the optimal layout for the interface depending on their device's screen size
-    - See hover and focus states for all interactive elements on the page
+## 📸 Screenshots
+
+- **Desktop**
+  ![Desktop Mode](./projectDesign/desktop-dark.png)
+
+  ![Desktop Mode](./projectDesign/desktop-light.png)
+
+- **Tablet**
+  ![Tablet Light Mode](./projectDesign/tablet-dark.png)
+
+  ![Tablet Light Mode](./projectDesign/tablet-light.png)
+
+- **Mobile**
+  ![Mobile Light Mode](./projectDesign/mobile-dark.png)
+
+  ![Mobile Light Mode](./projectDesign/mobile-light.png)
+
+## ✨ Features
+
+- **Character & Word Count:** Count characters (with or without spaces) and words in real-time.
+- **Sentence Count:** Automatically count the number of sentences.
+- **Reading Time Estimator:** Get an estimated reading time based on word count.
+- **Letter Density Analysis:** See letter frequency with priority sorting (caps, lowercase, numbers, symbols).
+- **Toggle Features:**
+  - Exclude spaces from character count.
+  - Set letter limits with a warning.
+  - View top letter density or expand to see all.
+- **Responsive Design:** Fully optimized for desktop, tablet, and mobile screens.
+- **Dark/Light Mode Support:** Seamlessly switch between themes.
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, TailwindCSS
+- **Bundler:** Vite
+
+## 📂 Project Setup
+
+1. Clone the repository:
+
+```bash
+ git clone https://github.com/Anoop-Rajoriya/LetterCounter-WebApp.git
+```
+
+2. Navigate to the project folder:
+
+```bash
+cd LetterCounter-WebApp
+```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Start the development server:
+
+```bash
+npm run dev
+```
+
+5. Open the app in your browser:
+
+```
+http://localhost:5173
+```
+
+## 👨‍💻 Author
+
+- **Anoop Rajoriya** — [GitHub](https://github.com/Anoop-Rajoriya)
+
+## 📜 License
+
+This project is licensed under the MIT License — feel free to use and modify it as you like!
