@@ -79,7 +79,7 @@ const Main = () => {
         Analyze your text in real-time.
       </h1>
       <textarea
-        // defaultValue="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        // defaultValue="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
 
         onInput={(event) => {
           const str = event.currentTarget.value.trim();
@@ -91,6 +91,16 @@ const Main = () => {
         placeholder="Enter your paragraph..."
         className="bg-complimentaryBg text-primaryText border-2 border-complimentaryText rounded-lg w-full h-40 md:h-60 p-2 outline-none"
       />
+      <p
+        className={`text-error text-sm md:text-base bg-errorTransparent my-2 py-2 border-2 border-error rounded-lg px-2 text-center capitalize ${
+          userInputs.textLettersLimit && getTextStringLettersCounts() > 200
+            ? "block"
+            : "hidden"
+        }`}
+      >
+        input text exceed letters limits of
+        <span className="font-bold pl-1">200 letters</span>
+      </p>
       <div className="py-4 flex flex-col gap-4 md:flex-row md:justify-between">
         <CustomCheckbox
           handler={(event) =>
