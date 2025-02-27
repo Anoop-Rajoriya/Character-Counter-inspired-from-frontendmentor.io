@@ -1,8 +1,8 @@
 import React from "react";
 
-const LatterCard = ({ letter, totle }) => {
-  const [char, count] = letter
-  let percentages = (count / totle) * 100;
+const LatterCard = ({ letter, total }) => {
+  const [char, count] = letter;
+  let percentages = (count / total) * 100;
   return (
     <div className="flex items-center justify-center gap-2 text-primaryText py-2">
       <span className="min-w-5">{char}</span>

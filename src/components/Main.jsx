@@ -6,71 +6,63 @@ import LetterCard from "./LetterCard";
 const Main = () => {
   const [userInputs, setUserInputs] = useState({
     textString: "",
-    canExcludSpaces: true,
+    excludeSpaces: true,
     textLettersLimit: false,
-    canSeeMore: false,
+    showFullDensity: false,
   });
 
-  const getTextStringLettersCounts = () => {
-    return userInputs.canExcludSpaces
+  // Count total characters, excluding spaces if selected
+  const countCharacters = () =>
+    userInputs.excludeSpaces
       ? userInputs.textString.replace(/\s+/g, "").length
       : userInputs.textString.length;
-  };
 
-  const getTextStringWordsCounts = () => {
+  // Count words in the text
+  const countWords = () => {
     const trimmedText = userInputs.textString.trim();
     return trimmedText ? trimmedText.split(/\s+/).length : 0;
   };
 
-  const getTextStringSentancesCounts = () => {
-    return (userInputs.textString.match(/[^.!?]+[.!?]/g) || []).length;
-  };
+  // Count sentences in the text
+  const countSentences = () =>
+    (userInputs.textString.match(/[^.!?]+[.!?]/g) || []).length;
 
-  const getReadingTime = (wordsPerMinute = 150) => {
-    const wordCount = getTextStringLettersCounts();
+  // Estimate reading time based on words per minute
+  const calculateReadingTime = (wordsPerMinute = 150) => {
+    const wordCount = countWords();
     const minutes = (wordCount / wordsPerMinute).toFixed(2);
     return minutes >= 1 ? `${minutes} Min` : `${Math.ceil(minutes * 60)} Sec`;
   };
 
-  const getTextStringLetterDensity = (size = null) => {
-    const userTextString = userInputs.canExcludSpaces
+  // Calculate letter frequency and sort by priority
+  const calculateLetterDensity = (size = null) => {
+    const textArray = userInputs.excludeSpaces
       ? userInputs.textString.replace(/\s+/g, "").split("")
       : userInputs.textString.split("");
 
-    // determining the density of each letter
-    let letterDensity = {};
+    const letterFrequency = textArray.reduce((acc, letter) => {
+      acc[letter] = (acc[letter] || 0) + 1;
+      return acc;
+    }, {});
 
-    userTextString.forEach((letter) => {
-      letterDensity[letter] = (letterDensity[letter] || 0) + 1;
-    });
+    const sortByPriority = (arr) =>
+      arr.sort((a, b) => {
+        const getPriority = (char) =>
+          /[A-Z]/.test(char)
+            ? 1
+            : /[a-z]/.test(char)
+            ? 2
+            : /[0-9]/.test(char)
+            ? 3
+            : 4;
 
-    function sortArrayOfArrays(arr) {
-      return arr.sort((a, b) => {
-        const getPriority = (char) => {
-          if (/[A-Z]/.test(char)) return 1; // Capital letters
-          if (/[a-z]/.test(char)) return 2; // Small letters
-          if (/[0-9]/.test(char)) return 3; // Numbers
-          return 4; // Special characters
-        };
-
-        const charA = a[0];
-        const charB = b[0];
-
-        let priorityA = getPriority(charA);
-        let priorityB = getPriority(charB);
-
-        if (priorityA !== priorityB) {
-          return priorityA - priorityB; // Sort by priority
-        }
-
-        return String(charA).localeCompare(String(charB)); // Sort alphabetically/lexically
+        return (
+          getPriority(a[0]) - getPriority(b[0]) || a[0].localeCompare(b[0])
+        );
       });
-    }
 
-    if (size) {
-      return sortArrayOfArrays(Object.entries(letterDensity)).slice(0, size);
-    }
-    return sortArrayOfArrays(Object.entries(letterDensity));
+    const sortedDensity = sortByPriority(Object.entries(letterFrequency));
+    return size ? sortedDensity.slice(0, size) : sortedDensity;
   };
 
   return (
@@ -78,38 +70,37 @@ const Main = () => {
       <h1 className="text-primaryText pt-3 pb-6 font-bold text-4xl md:px-6 md:text-6xl text-center md:w-[70%] md:mx-auto">
         Analyze your text in real-time.
       </h1>
-      <textarea
-        // defaultValue="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
 
-        onInput={(event) => {
-          const str = event.currentTarget.value.trim();
-          setUserInputs((preState) => ({
-            ...preState,
-            textString: str,
-          }));
-        }}
+      {/* Textarea for user input */}
+      <textarea
+        onInput={(event) =>
+          setUserInputs((prev) => ({
+            ...prev,
+            textString: event.target.value.trim(),
+          }))
+        }
         placeholder="Enter your paragraph..."
         className="bg-complimentaryBg text-primaryText border-2 border-complimentaryText rounded-lg w-full h-40 md:h-60 p-2 outline-none"
       />
-      <p
-        className={`text-error text-sm md:text-base bg-errorTransparent my-2 py-2 border-2 border-error rounded-lg px-2 text-center capitalize ${
-          userInputs.textLettersLimit && getTextStringLettersCounts() > 200
-            ? "block"
-            : "hidden"
-        }`}
-      >
-        input text exceed letters limits of
-        <span className="font-bold pl-1">200 letters</span>
-      </p>
+
+      {/* Error message for exceeding letter limit */}
+      {userInputs.textLettersLimit && countCharacters() > 200 && (
+        <p className="text-error text-sm md:text-base bg-errorTransparent my-2 py-2 border-2 border-error rounded-lg px-2 text-center capitalize">
+          Input text exceeds letter limit of{" "}
+          <span className="font-bold">200 letters</span>
+        </p>
+      )}
+
+      {/* Options and reading time */}
       <div className="py-4 flex flex-col gap-4 md:flex-row md:justify-between">
         <CustomCheckbox
           handler={(event) =>
             setUserInputs((preState) => ({
               ...preState,
-              canExcludSpaces: !userInputs.canExcludSpaces,
+              excludeSpaces: !userInputs.excludeSpaces,
             }))
           }
-          value={userInputs.canExcludSpaces}
+          value={userInputs.excludeSpaces}
           label="Exclude Spaces"
         />
         <CustomCheckbox
@@ -124,55 +115,50 @@ const Main = () => {
         />
         <p className="text-complimentaryText capitalize">
           Approx. Reading Time:{" "}
-          <span className="font-bold">{getReadingTime()}</span>
+          <span className="font-bold">{calculateReadingTime()}</span>
         </p>
       </div>
+
+      {/* Text analysis summary cards */}
       <div className="flex flex-col md:flex-row gap-3 pt-2 py-4">
         {[
           {
             label: "Total Characters",
-            value: getTextStringLettersCounts(),
+            value: countCharacters(),
             color: "bg-orange",
           },
-          {
-            label: "Word Count",
-            value: getTextStringWordsCounts(),
-            color: "bg-red",
-          },
+          { label: "Word Count", value: countWords(), color: "bg-red" },
           {
             label: "Sentence Count",
-            value: getTextStringSentancesCounts(),
+            value: countSentences(),
             color: "bg-violet",
           },
         ].map((obj, index) => (
           <Card key={index} cardObj={obj} />
         ))}
       </div>
+
+      {/* Letter density section */}
       <div className="pt-2">
         <h2 className="text-primaryText capitalize font-bold text-xl md:text-2xl">
           Letter Density
         </h2>
         <div className="py-4">
-          {!userInputs.canSeeMore
-            ? getTextStringLetterDensity(5).map((letterinfo, index) => (
-                <LetterCard
-                  key={index}
-                  letter={letterinfo}
-                  totle={getTextStringLettersCounts()}
-                />
-              ))
-            : getTextStringLetterDensity().map((letterinfo, index) => (
-                <LetterCard
-                  key={index}
-                  letter={letterinfo}
-                  totle={getTextStringLettersCounts()}
-                />
-              ))}
+          {(userInputs.showFullDensity
+            ? calculateLetterDensity()
+            : calculateLetterDensity(5)
+          ).map((letterInfo, index) => (
+            <LetterCard
+              key={index}
+              letter={letterInfo}
+              total={countCharacters()}
+            />
+          ))}
           <button
             onClick={() =>
-              setUserInputs((preState) => ({
-                ...preState,
-                canSeeMore: !userInputs.canSeeMore,
+              setUserInputs((prev) => ({
+                ...prev,
+                showFullDensity: !prev.showFullDensity,
               }))
             }
             className="text-primaryText flex items-center justify-center text-lg md:text-xl rounded space-x-2 mt-2"
