@@ -1,14 +1,5 @@
 import React from "react";
 
-/**
- * CustomCheckbox Component
- * A reusable checkbox with a label and dynamic styling.
- *
- * Props:
- * - label: The label text for the checkbox.
- * - value: Boolean value indicating whether the checkbox is checked.
- * - handler: Function to update the application state.
- */
 const CustomCheckbox = ({ label, handler, value }) => {
   return (
     <label className="flex items-center cursor-pointer relative">

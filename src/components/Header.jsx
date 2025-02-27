@@ -62,9 +62,9 @@ const Header = ({ theme }) => {
         className="flex items-center justify-center text-complimentaryText"
       >
         <h1 className="capitalize font-bold text-xl md:text-2xl">
-          Char Counter
+          Letter Counter
           <a
-            className="text-sm md:text-base ml-1 uppercase text-orange"
+            className="text-sm md:text-base ml-2 uppercase text-orange underline"
             href="#"
           >
             by AR
